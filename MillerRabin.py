@@ -4,6 +4,8 @@
 
 import random
 from ModularExponentiation import square_and_multiply as modexp
+from ModularExponentiation import modular_square as modsquare
+
 
 def prepare(integer):
 
@@ -20,6 +22,7 @@ def prepare(integer):
 
     return (r, d)
 
+
 def test1(a, r_d, integer):
 
     ## Tests for given element a mod n whether a**d = 1.
@@ -29,26 +32,28 @@ def test1(a, r_d, integer):
     
     return modexp(a, d, integer) == 1
 
+
 def test2(a, r_d, integer):
 
     ## Tests for given element a mod n whether a ** (2s * d) = pm 1
     ## for some s between 0 and r - 1
 
     r, d = r_d[0], r_d[1]
+    output = modexp(a, d, integer)
 
     for s in range(0, r):
-
-        exponent = (2 ** s) * d
-        output = modexp(a, exponent, integer)
-
         if output == 1 or output == integer - 1:
             return True
+        
+        output = modsquare(output, integer)
 
     return False
+
 
 def witness(a, r_d, integer):
 
     ## Returns true if a is a witness to compositeness of integer.
+    
     if test1(a, r_d, integer) == False:
         if test2(a, r_d, integer) == False:
             return True
@@ -65,11 +70,13 @@ def miller_rabin(integer, k):
     for a in witnesses:
 
         ## If a is a witness then we know for a fact integer is composite.
+        
         if witness(a, r_d, integer):
             return False
         
     ## If we have run this test k times without finding a witness
     ## we guess that integer is prime.
+        
     return True
 
 
