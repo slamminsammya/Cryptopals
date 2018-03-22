@@ -29,7 +29,7 @@ def get_prime():
 
     while True:
         
-        candidate = random.randint(2 ** 24, 2** 25)
+        candidate = random.getrandbits(64)
         
         if test_division(candidate):
             if miller_rabin(candidate, 6):

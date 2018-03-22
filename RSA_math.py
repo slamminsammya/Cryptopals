@@ -12,13 +12,8 @@ def div(a, b):
     if a > b:
         a, b = b, a
 
-    q = 0
-    r = b
-    while r >= a:
-        q += 1
-        r -= a
+    return b/a
 
-    return q
 
 def extended_gcd(a, b):
     ## Returns a dictionary with the relevant values.
@@ -52,8 +47,41 @@ def extended_gcd(a, b):
 
 def gcd(a,b):
     ## returns the gcd of a,b
-    
-    return extended_gcd(a,b)['gcd']
+
+    if a > b:
+        a, b = b, a
+
+    if a == 2:
+        
+        if int(str(b)[-1]) % 2 == 0:
+            return 2
+        else:
+            return 1
+
+    elif a == 3:
+        
+        digits = [int(x) for x in list(str(b))]
+        if sum(x for x in digits) % 3 == 0:
+            return 3
+        else:
+            return 1
+
+    elif a == 5:
+
+        if str(b)[-1] == '5' or str(b)[-1] == '0':
+            return 5
+
+        else:
+            return 1
+
+    else:
+
+        while a > 0:
+            a, b = b % a, a
+            
+        return b
+
+##    return extended_gcd(a,b)['gcd']
 
 ##################################################################
 
@@ -143,8 +171,8 @@ def get_factor(number):
 
 
 def factorize(number):
-    ## Collects information about factorization of a number.
     
+    ## Collects information about factorization of a number.
     if number < 0:
         number = -number
         
@@ -159,11 +187,13 @@ def factorize(number):
 
 
 def factors(number):
+    
     ## Returns list of prime factors without multiplicities.
     return factorize(number).prime_factors()
 
 
 def factors_mult(number):
+    
     ## Returns list of prime factors and multiplicities as tuples.
     return factorize(number).multiplicities()
 
@@ -175,12 +205,13 @@ class factorization(object):
     ## (prime, multiplicity) in ascending order of prime size.
 
     def __init__(self):
+        
         self.dictionary = {}
 
     def add_factor(self, prime):
+        
         ## Increases mulitplicity of prime by one. Annoying normally since
         ## have to first check if key value is there.
-        
         if prime in self.dictionary.keys():
             self.dictionary[prime] += 1
 
@@ -188,9 +219,12 @@ class factorization(object):
             self.dictionary[prime] = 1
 
     def prime_factors(self):
+        
         return sorted(self.dictionary.keys())
 
+
     def multiplicities(self):
+        
         return [(prime,
                  self.dictionary[prime]) for prime in self.prime_factors()]
 
@@ -202,9 +236,12 @@ class factorization(object):
 ## First factorizes and then uses formula for totient of a prime power.
 
 def prime_totient(prime, power):
+    
     return (prime - 1) * prime ** (power - 1)
 
+
 def totient(number):
+    
     factors = factors_mult(number)
     totients = [prime_totient(prime, power) for (prime, power) in factors]
     totient = 1
